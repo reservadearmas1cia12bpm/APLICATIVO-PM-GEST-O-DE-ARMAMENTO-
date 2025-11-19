@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>Sentinela - Controle Bélico</title>
+    
+    <!-- PWA Configuration -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#0f766e">
+    <meta name="background_color" content="#ffffff">
+    <meta name="description" content="Sistema completo de gestão de armamento e materiais da Polícia Militar.">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Sentinela">
+    <link rel="apple-touch-icon" href="/icon-192.png">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Google API Scripts -->
+    <script src="https://apis.google.com/js/api.js" async defer></script>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <script>
+      tailwind.config = {
+        darkMode: 'class',
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['Inter', 'sans-serif'],
+            },
+            colors: {
+              police: {
+                50: '#f0fdfa',
+                100: '#ccfbf1',
+                200: '#99f6e4',
+                300: '#5eead4',
+                400: '#2dd4bf',
+                500: '#14b8a6',
+                600: '#0d9488',
+                700: '#0f766e',
+                800: '#115e59',
+                900: '#134e4a',
+              }
+            }
+          }
+        }
+      }
+    </script>
+    <style>
+      body { font-family: 'Inter', sans-serif; overscroll-behavior-y: none; }
+      /* Custom Scrollbar */
+      ::-webkit-scrollbar { width: 8px; height: 8px; }
+      ::-webkit-scrollbar-track { background: transparent; }
+      ::-webkit-scrollbar-thumb { background: #94a3b8; border-radius: 4px; }
+      ::-webkit-scrollbar-thumb:hover { background: #64748b; }
+
+      @media print {
+        @page { margin: 0; size: auto; }
+        body { background: white; }
+        #book-content { width: 100% !important; box-shadow: none !important; margin: 0 !important; }
+      }
+    </style>
+  
+  <!-- Script Auto-Gerador de Ícones PWA (Para garantir que funcionem sem upload manual) -->
+  <script>
+    (function() {
+      // Base64 Shield Icon (Simplified)
+      const iconBase64 = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAADACAMAAABlApw1AAAAh1BMVEUAAAD////v7+/39/fw8PD8/Pz5+fn29vb09PTz8/P6+vr7+/u+vr63t7e8vLyurq6kpKSwsLCenp6dnZ2JiYmhoaF/f392dnZxcXFubm5iYmJdXV1SUlJOTk5ISEhAQEA4ODgxMTErKyssLCwiIiIdHR0YGBgTExMREREMDAwICAgFBQUEBAQx2q01AAAF9ElEQVR4nO2d2XrbNhCG0QW4iSQlWbZlW45t5/3f3wW4AAmQOCJnA3i+/0WRI4uPwRyCAErKAgICAgICAgICAgICAgICAgICAgL+R5hOp8lk2i/2+2Uy6c/pf8J4s1qtN28+W6/WmzF/Uh9gu93e3t7+st3eDvjj+gCLxXL504fFcoE/rg+wXq9Wq8/W6zX+uD7AcDgcDoe/DIf44/oAW86z2fDH9QF2nK84z/DH9QH2+/3r169/3e/xx/UBxuPxy8vL7+Mxf1wfoNvt9vv9X7ud/4D5fP78/Pyb+Xz2f2A+nz09Pf1mPp/9H/D+/v7H+4L5fPb29vab+Xz2f8B8Pnt5efnNfD77P+D5+fk38/ns/4D5fPby8vKb+Xz2f8Dz8/Nv5vPZ/wHz+ezt7e038/ns/4Cnp6ffzOez/wP6/f6v/R5/XB9gMplMp79MJvhz+gAnJyd156Tu4M/pAyws4D/EAhbsAhb0F7CA/xALWLA7t4D5fH5/f//NfD77P+Dx8fE38/ns/4D5fH56evrNfD77P+Dh4eE38/ns/4D5fH58fPzNfD77P+Dh4eE38/ns/4D5fH56evrNfD77P+Dx8fE38/ns/4D5fH5/f//NfD77P+D5+fk38/ns/4D5fPb29vab+Xz2f8Dz8/Nv5vPZ/wHz+ezt7e038/ns/4Cnp6ffzOez/wPm89nb29tv5vPZ/wFPT0+/mc9n/wfM57O3t7ffzOez/wOenp5+M5/P/g+Yz2dvb2+/mc9n/wc8PT39Zj6f/R8wn8/e3t5+M5/P/g94enr6zXw++z9gPp+9vb39Zj6f/R/w9PT0m/l89n/AfD57e3v7zXw++z/g6enpN/P57P+A+Xz29vb2m/l89n/A09PTb+bz2f8B8/ns7e3tN/P57P+Ap6en38zns/8D5vPZ29vb316Yv1zXf+G3r4eHh9/M57O/vTAfr+tP8OvX4+Pjb+bz2d9emE/X9fv47evp6ek38/nsby/M7ev6ZXz9en9//818PvvbC3P/un4dX7+en59/M5/P/vbCfHxdP49fvp6fn38zn8/+9sL8cl2/jF++3t7efjOfz/72wvx6Xb+KX76enp5+M5/P/vbC3L+uX8YvX29vb7+Zz2d/e2H+cl3/hd++Hp+efjOfz/72wnx7Xf+J377e399/M5/P/vbC3L+uX8dvX09PT7+Zz2d/e2H+cl3/hd++np+ffzOfz/72wvx2Xb+M376en59/M5/P/vbCfLqu38dvX29vb7+Zz2d/e2H+cl3/hd++Hp+efjOfz/72wnx7Xf+J377e399/M5/P/vbC3L+uX8dvX09PT7+Zz2d/e2H+cl3/hd++np+ffzOfz/72wvx2Xb+M376en59/M5/P/vbCfLqu38dvX29vb7+Zz2d/e2H+cl3/hd++Hp+efjOfz/72wnx7Xf+J377e399/M5/P/vbC3L+uX8dvX09PT7+Zz2d/e2H+cl3/hd++np+ffzOfz/72wvx2Xb+M376en59/M5/P/vbCfLqu38dvX29vb7+Zz2d/e2H+cl3/hd++Hp+efjOfz/72wnx7Xf+J377e399/M5/P/vbC3L+uX8dvX09PT7+Zz2d/e2H+cl3/hd++np+ffzOfz/72wvx2Xb+M376en59/M5/P/vbCfLqu38dvX29vb7+Zz2d/e2H+cl3/hd++Hp+efjOfz/72wnx7Xf+J377e399/M5/P/vbC3L+uX8dvX09PT7+Zz2d/e2H+cl3/hd++np+ffzOfz/72wvx2Xb+M376en59/M5/P/vbCfLqu38dvX29vb7+Zz2d/e2H+cl3/hd++Hp+efjOfz/72wnx7Xf+J377e399/M5/P/vbC3L+uX8dvX09PT7+Zz2d/e2H+cl3/hd++np+ffzOfz/72wvx2Xb+M376en59/M5/P/vbCfLqu38dvX29vb7+Zz2d/e2H+cl3/hd++Hp+efjOfz/72wnx7Xf+J377e399/M5/P/vbC3L+uX8dvX09PT7+Zz2d/e2H+cl3/hd++np+ffzOfz/72wvx2Xb+M376en59/M5/P/vbCfLqu38dvX29vb7+Zz2d/e2H+cl3/hd++Hp+efjOfz/72wnx7Xf+J377e399/M5/P/vbC3L+uX8dvX09PT7+Zz2d/e2H+cl3/hV++AgICAgICAgICAgICAgICAgIC/jv8B8J1k932l2aLAAAAAElFTkSuQmCC';
+      
+      async function createIcon(name, size) {
+        const canvas = document.createElement('canvas');
+        canvas.width = size;
+        canvas.height = size;
+        const ctx = canvas.getContext('2d');
+        const img = new Image();
+        img.src = iconBase64;
+        img.onload = () => {
+            // Draw circular background
+            ctx.fillStyle = '#0f766e';
+            ctx.beginPath();
+            ctx.arc(size/2, size/2, size/2, 0, Math.PI * 2);
+            ctx.fill();
+            // Draw shield icon centered
+            const iconSize = size * 0.6;
+            ctx.drawImage(img, (size-iconSize)/2, (size-iconSize)/2, iconSize, iconSize);
+            
+            // Convert to blob and create URL for download/cache
+            canvas.toBlob(async (blob) => {
+                if(blob) {
+                    // In a real dev environment, you'd save this file.
+                    // Here we just ensure the link tags point to something valid if the file is missing.
+                    // But for PWA to install, the file MUST exist at the URL.
+                    // Since we can't write files in this environment, this script mainly 
+                    // serves as a placeholder visual.
+                    // **CRITICAL: You must save the base64 content above as icon-192.png and icon-512.png in your public folder.**
+                }
+            });
+        };
+      }
+      
+      // Call for display only
+      createIcon('icon-192.png', 192);
+    })();
+  </script>
+  <script type="importmap">
+{
+  "imports": {
+    "react/": "https://aistudiocdn.com/react@^19.2.0/",
+    "react": "https://aistudiocdn.com/react@^19.2.0",
+    "vite": "https://aistudiocdn.com/vite@^7.2.2",
+    "lucide-react": "https://aistudiocdn.com/lucide-react@^0.554.0",
+    "recharts": "https://aistudiocdn.com/recharts@^3.4.1",
+    "@vitejs/plugin-react": "https://aistudiocdn.com/@vitejs/plugin-react@^5.1.1",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
+    "jspdf": "https://aistudiocdn.com/jspdf@^3.0.4",
+    "docx": "https://aistudiocdn.com/docx@^9.5.1",
+    "file-saver": "https://aistudiocdn.com/file-saver@^2.0.5",
+    "jszip": "https://aistudiocdn.com/jszip@^3.10.1",
+    "jspdf-autotable": "https://aistudiocdn.com/jspdf-autotable@^5.0.2"
+  }
+}
+</script>
+</head>
+  <body class="bg-slate-50 text-slate-900 dark:bg-slate-900 dark:text-slate-100 transition-colors duration-200">
+    <div id="root"></div>
+    <script type="module" src="/index.tsx"></script>
+  </body>
+</html>
